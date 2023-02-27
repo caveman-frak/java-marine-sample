@@ -2,13 +2,14 @@ plugins {
     id 'java'
     id 'jvm-test-suite'
     id 'org.springframework.boot' version '3.0.2'
+    id "io.freefair.lombok" version "6.6.1"
 }
 
 apply plugin: 'java'
 apply plugin: 'io.spring.dependency-management'
 
 group 'bluegecko.co.uk'
-version '1.0-SNAPSHOT'
+version '0.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -16,9 +17,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation 'org.locationtech.spatial4j:spatial4j:0.8'
 }
 
 testing {
@@ -28,6 +27,8 @@ testing {
             dependencies {
                 implementation project()
                 implementation 'org.springframework.boot:spring-boot-starter-test'
+                implementation 'org.assertj:assertj-core'
+                implementation 'org.mockito:mockito-core'
             }
         }
 
