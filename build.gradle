@@ -36,6 +36,10 @@ testing {
         }
 
         integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation project()
+                implementation 'org.springframework:spring-web:6.0.5'
+            }
         }
     }
 }

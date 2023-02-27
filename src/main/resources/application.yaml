@@ -3,3 +3,6 @@ server:
 spring:
   lifecycle:
     timeout-per-shutdown-phase: "5s"
+  output:
+    ansi:
+      enabled: "always"
