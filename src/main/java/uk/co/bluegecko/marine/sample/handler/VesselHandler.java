@@ -32,11 +32,9 @@ public class VesselHandler {
 	 */
 	public ServerResponse find(String uuid) {
 		try {
-			Optional<Vessel> vessel = vesselService.find(UUID.fromString(uuid));
-			if (vessel.isPresent())
-				return ServerResponse.ok().body(vessel);
-			else
-				return ServerResponse.notFound().build();
+			Optional<Vessel> result = vesselService.find(UUID.fromString(uuid));
+			return result.map(vessel -> ServerResponse.ok().body(vessel))
+					.orElse(ServerResponse.notFound().build());
 		} catch (IllegalArgumentException ex) {
 			return ServerResponse.badRequest().body("Invalid identifier");
 		}

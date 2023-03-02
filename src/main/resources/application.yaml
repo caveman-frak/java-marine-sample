@@ -1,8 +1,29 @@
 server:
   shutdown: "graceful"
+  compression:
+    enabled: true
+    min-response-size: 2048
 spring:
   lifecycle:
     timeout-per-shutdown-phase: "5s"
   output:
     ansi:
       enabled: "always"
+
+  jackson:
+    serialization:
+      indent_output: true
+
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+    jmx:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+      secured: false

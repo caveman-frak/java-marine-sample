@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.co.bluegecko.marine.sample.config.JacksonConfiguration;
 import uk.co.bluegecko.marine.sample.handler.VesselHandler;
 import uk.co.bluegecko.marine.sample.model.data.Vessel;
 import uk.co.bluegecko.marine.sample.service.VesselService;
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(VesselController.class)
-@ContextConfiguration(classes = {VesselController.class, VesselHandler.class})
+@ContextConfiguration(classes = {VesselController.class, VesselHandler.class, JacksonConfiguration.class})
 public class VesselControllerTest {
 
 	@MockBean
@@ -31,15 +32,15 @@ public class VesselControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
+	private final List<Vessel> vessels = List.of(
+			Vessel.builder().id(11, 1).name("Test 001").tonnage(1.0).width(2.5).length(5.1).build(),
+			Vessel.builder().id(12, 2).active(false).name("Test 002").tonnage(1.1).width(2.4).length(5.2).build(),
+			Vessel.builder().id(13, 3).name("Test 003").tonnage(1.2).width(2.3).length(5.3).build(),
+			Vessel.builder().id(14, 4).name("Test 004").tonnage(1.3).width(2.2).length(5.4).build(),
+			Vessel.builder().id(15, 5).name("Test 005").tonnage(1.4).width(2.1).length(5.5).build());
+
 	@BeforeEach
 	void setUp() {
-		List<Vessel> vessels = List.of(
-				Vessel.builder().id(11, 1).name("Test 001").tonnage(1.0F).width(2.5F).length(5.1f).build(),
-				Vessel.builder().id(12, 2).active(false).name("Test 002").tonnage(1.1F).width(2.4F).length(5.2f).build(),
-				Vessel.builder().id(13, 3).name("Test 003").tonnage(1.2F).width(2.3f).length(5.3f).build(),
-				Vessel.builder().id(14, 4).name("Test 004").tonnage(1.3F).width(2.2f).length(5.4F).build(),
-				Vessel.builder().id(15, 5).name("Test 005").tonnage(1.4F).width(2.1F).length(5.5F).build()
-		);
 		when(vesselService.all()).thenReturn(vessels.stream().filter(Vessel::isActive).toList());
 		when(vesselService.find(any(UUID.class))).thenReturn(vessels.stream().findFirst());
 	}
