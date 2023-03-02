@@ -19,8 +19,7 @@ import java.io.IOException;
 public class JacksonConfiguration {
 
 	@Bean
-	public Jackson2ObjectMapperBuilderCustomizer registerUnitOfMeasure() {
-
+	public Jackson2ObjectMapperBuilderCustomizer registerUnitOfMeasureModule() {
 		return builder -> builder.modules(new UnitJacksonModule())
 				.serializers(new QuantityJsonSerializer())
 				.deserializers(new QuantityJsonDeserializer());
