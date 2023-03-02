@@ -23,7 +23,3 @@ management:
     jmx:
       exposure:
         include: "*"
-  endpoint:
-    shutdown:
-      enabled: true
-      secured: false
