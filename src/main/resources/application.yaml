@@ -3,13 +3,13 @@ server:
   compression:
     enabled: true
     min-response-size: 2048
+
 spring:
   lifecycle:
     timeout-per-shutdown-phase: "5s"
   output:
     ansi:
       enabled: "always"
-
   jackson:
     serialization:
       indent_output: true

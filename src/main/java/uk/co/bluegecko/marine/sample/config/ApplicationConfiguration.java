@@ -6,10 +6,11 @@ import org.springframework.stereotype.Component;
 import java.time.Clock;
 
 @Component
-public class ApplicationConfig {
+public class ApplicationConfiguration {
 
 	@Bean
-	public Clock getClock() {
+	public Clock clock() {
 		return Clock.systemUTC();
 	}
+
 }

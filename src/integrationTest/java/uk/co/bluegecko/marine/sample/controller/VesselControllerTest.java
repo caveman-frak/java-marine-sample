@@ -8,7 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import uk.co.bluegecko.marine.sample.config.JacksonConfiguration;
+import uk.co.bluegecko.marine.sample.config.ApplicationConfiguration;
 import uk.co.bluegecko.marine.sample.handler.VesselHandler;
 import uk.co.bluegecko.marine.sample.model.data.Vessel;
 import uk.co.bluegecko.marine.sample.service.VesselService;
@@ -18,12 +18,13 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(VesselController.class)
-@ContextConfiguration(classes = {VesselController.class, VesselHandler.class, JacksonConfiguration.class})
+@ContextConfiguration(classes = {VesselController.class, VesselHandler.class, ApplicationConfiguration.class})
 public class VesselControllerTest {
 
 	@MockBean
@@ -43,6 +44,7 @@ public class VesselControllerTest {
 	void setUp() {
 		when(vesselService.all()).thenReturn(vessels.stream().filter(Vessel::isActive).toList());
 		when(vesselService.find(any(UUID.class))).thenReturn(vessels.stream().findFirst());
+		when(vesselService.delete(any(UUID.class))).thenReturn(true);
 	}
 
 	@Test
@@ -70,4 +72,29 @@ public class VesselControllerTest {
 				.andExpect(jsonPath("$.name").value("Test 001"))
 				.andReturn();
 	}
+
+	@Test
+	void testGetInvalid() throws Exception {
+		mockMvc.perform(get("/vessel/{id}", "FooBar")
+						.accept(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML))
+				.andDo(print())
+				.andExpect(status().is4xxClientError())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.status").value("400"))
+				.andExpect(jsonPath("$.error").value("Bad Request"))
+				.andExpect(jsonPath("$.exception").value("IllegalArgumentException"))
+				.andExpect(jsonPath("$.message").value("Invalid UUID string: FooBar"))
+				.andExpect(jsonPath("$.path").value("GET /vessel/FooBar"))
+				.andExpect(jsonPath("$.accept").value("application/json,application/xml"))
+				.andReturn();
+	}
+
+	@Test
+	void testDelete() throws Exception {
+		mockMvc.perform(delete("/vessel/{id}", new UUID(11, 1)))
+				.andDo(print())
+				.andExpect(status().isNoContent())
+				.andReturn();
+	}
+
 }

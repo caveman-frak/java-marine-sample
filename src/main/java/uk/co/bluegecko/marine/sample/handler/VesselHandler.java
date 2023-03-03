@@ -31,13 +31,15 @@ public class VesselHandler {
 	 * @return 200 response with the vessel if it exists or 404.
 	 */
 	public ServerResponse find(String uuid) {
-		try {
-			Optional<Vessel> result = vesselService.find(UUID.fromString(uuid));
-			return result.map(vessel -> ServerResponse.ok().body(vessel))
-					.orElse(ServerResponse.notFound().build());
-		} catch (IllegalArgumentException ex) {
-			return ServerResponse.badRequest().body("Invalid identifier");
-		}
+		Optional<Vessel> result = vesselService.find(UUID.fromString(uuid));
+		return result.map(vessel -> ServerResponse.ok().body(vessel))
+				.orElse(ServerResponse.notFound().build());
 	}
 
+	public ServerResponse delete(String uuid) {
+		if (vesselService.delete(UUID.fromString(uuid)))
+			return ServerResponse.noContent().build();
+		else
+			return ServerResponse.notFound().build();
+	}
 }

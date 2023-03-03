@@ -37,10 +37,38 @@ class VesselServiceBaseTest {
 				.as("Incorrect ID")
 				.isEmpty();
 		assertThatNullPointerException()
-				.as("Missing ID")
+				.as("Null ID")
 				.isThrownBy(() -> vesselService.find(null))
 				.withMessage("id is marked non-null but is null")
 				.withNoCause();
 	}
 
+	@Test
+	@SuppressWarnings("null")
+	void testDelete() {
+		assertThat(vesselService.delete(new UUID(11, 1)))
+				.as("Correct ID")
+				.isTrue();
+		assertThat(vesselService.delete(new UUID(0, 1)))
+				.as("Incorrect ID")
+				.isFalse();
+		assertThatNullPointerException()
+				.as("Null ID")
+				.isThrownBy(() -> vesselService.delete(null))
+				.withMessage("id is marked non-null but is null")
+				.withNoCause();
+	}
+
+	@Test
+	void testDeleteEffects() {
+		assertThat(vesselService.delete(new UUID(11, 1)))
+				.as("First pass")
+				.isTrue();
+		assertThat(vesselService.delete(new UUID(11, 1)))
+				.as("Second pass, vessel deleted")
+				.isFalse();
+		assertThat(vesselService.all()).hasSize(3)
+				.extracting(Vessel::getName)
+				.contains("Test 003", "Test 004", "Test 005");
+	}
 }

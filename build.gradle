@@ -46,3 +46,10 @@ testing {
         }
     }
 }
+
+tasks.named('integrationTest') {
+    dependsOn(testing.suites.test)
+}
+tasks.named('check') {
+    dependsOn(testing.suites.integrationTest)
+}

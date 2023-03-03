@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import uk.co.bluegecko.marine.sample.model.data.Vessel;
 import uk.co.bluegecko.marine.sample.service.VesselService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,7 +21,7 @@ import static systems.uom.ucum.UCUM.TONNE;
 @Slf4j
 public class VesselServiceBase implements VesselService {
 
-	List<Vessel> vessels = List.of(
+	List<Vessel> vessels = new ArrayList<>(List.of(
 			Vessel.builder().id(11, 1).name("Test 001")
 					.tonnage(1.0, TONNE).width(2.5, METER).length(5.1, METER).build(),
 			Vessel.builder().id(12, 2).name("Test 002").active(false)
@@ -31,7 +32,7 @@ public class VesselServiceBase implements VesselService {
 					.tonnage(1.3, TONNE).width(2.2, METER).length(5.4, METER).build(),
 			Vessel.builder().id(15, 5).name("Test 005")
 					.tonnage(1.4, TONNE).width(2.1, METER).length(5.5, METER).build()
-	);
+	));
 
 	@Override
 	public List<Vessel> all() {
@@ -45,6 +46,6 @@ public class VesselServiceBase implements VesselService {
 
 	@Override
 	public boolean delete(@NonNull UUID id) {
-		return false;
+		return vessels.removeIf(v -> v.getId().equals(id));
 	}
 }
