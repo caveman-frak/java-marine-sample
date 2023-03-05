@@ -1,12 +1,15 @@
-package uk.co.bluegecko.marine.sample.controller;
+package uk.co.bluegecko.marine.sample.config;
 
 import lombok.NonNull;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import java.time.*;
+import java.util.Random;
+import java.util.random.RandomGenerator;
 
 @TestConfiguration
+public
 class TestApplicationConfiguration {
 
 	@Bean
@@ -38,4 +41,10 @@ class TestApplicationConfiguration {
 	public Clock clock(@NonNull Instant instant, @NonNull ZoneId zone) {
 		return Clock.fixed(instant, zone);
 	}
+
+	@Bean
+	public RandomGenerator randomGenerator() {
+		return new Random();
+	}
+	
 }

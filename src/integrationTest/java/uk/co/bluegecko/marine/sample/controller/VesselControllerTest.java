@@ -8,6 +8,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.co.bluegecko.marine.sample.config.TestApplicationConfiguration;
+import uk.co.bluegecko.marine.sample.handler.ErrorHandler;
 import uk.co.bluegecko.marine.sample.handler.VesselHandler;
 import uk.co.bluegecko.marine.sample.model.data.Vessel;
 import uk.co.bluegecko.marine.sample.service.VesselService;
@@ -24,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(VesselController.class)
-@ContextConfiguration(classes = {VesselController.class, VesselHandler.class, TestApplicationConfiguration.class})
+@ContextConfiguration(classes = {VesselController.class, VesselHandler.class, ErrorHandler.class, TestApplicationConfiguration.class})
 public class VesselControllerTest {
 
 	@MockBean
