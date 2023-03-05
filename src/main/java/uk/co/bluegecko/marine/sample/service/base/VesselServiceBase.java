@@ -1,6 +1,7 @@
 package uk.co.bluegecko.marine.sample.service.base;
 
 
+import io.micrometer.core.annotation.Timed;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -34,16 +35,19 @@ public class VesselServiceBase implements VesselService {
 					.tonnage(1.4, TONNE).width(2.1, METER).length(5.5, METER).build()
 	));
 
+	@Timed("vessel.all")
 	@Override
 	public List<Vessel> all() {
 		return vessels.stream().filter(Vessel::isActive).toList();
 	}
 
+	@Timed("vessel.get")
 	@Override
 	public Optional<Vessel> find(@NonNull UUID id) {
 		return vessels.stream().filter(v -> v.getId().equals(id)).findFirst();
 	}
 
+	@Timed("vessel.delete")
 	@Override
 	public boolean delete(@NonNull UUID id) {
 		return vessels.removeIf(v -> v.getId().equals(id));

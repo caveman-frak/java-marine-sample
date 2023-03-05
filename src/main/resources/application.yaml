@@ -13,6 +13,9 @@ spring:
   jackson:
     serialization:
       indent_output: true
+  mvc:
+    problemdetails:
+      enabled: true
 
 management:
   endpoints:
@@ -23,3 +26,10 @@ management:
     jmx:
       exposure:
         include: "*"
+
+logging:
+  group:
+    bluegecko: "uk.co.bluegecko"
+  level:
+    root: "info"
+    bluegecko: "debug"

@@ -1,5 +1,6 @@
 package uk.co.bluegecko.marine.sample.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -17,12 +18,17 @@ import static org.springframework.web.servlet.function.RouterFunctions.route;
  * Routing for Vessel end-points.
  */
 @Configuration(proxyBeanMethods = false)
+@Slf4j
 public class VesselController extends AbstractController {
 
 	@Bean
 	public RouterFunction<ServerResponse> routerFunction(VesselHandler vesselHandler, Clock clock) {
 		return route().nest(RequestPredicates.path("/vessel"),
 						builder -> {
+							builder.before(request -> {
+								log.info("Processing {} {}", request.method(), request.requestPath());
+								return request;
+							});
 							builder.GET("", AbstractController.ACCEPT_JSON, request ->
 									vesselHandler.all());
 							builder.GET("/{id}", AbstractController.ACCEPT_JSON, request ->
@@ -32,8 +38,7 @@ public class VesselController extends AbstractController {
 						}
 				)
 				.onError(IllegalArgumentException.class, (e, request) ->
-						buildResponse(e, request, HttpStatus.BAD_REQUEST, clock)
-				)
+						buildResponse(e, request, HttpStatus.BAD_REQUEST, clock))
 				.build();
 	}
 
