@@ -19,6 +19,9 @@ import java.util.stream.Collectors;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
+/**
+ * Handle controller related errors.
+ */
 @Service
 @Value
 @Slf4j

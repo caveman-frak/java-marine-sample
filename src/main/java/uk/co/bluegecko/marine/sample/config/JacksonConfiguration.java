@@ -3,11 +3,13 @@ package uk.co.bluegecko.marine.sample.config;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.serializer.Deserializer;
 import org.springframework.stereotype.Component;
 import tech.units.indriya.format.SimpleQuantityFormat;
 import tech.uom.lib.jackson.UnitJacksonModule;
@@ -15,6 +17,10 @@ import tech.uom.lib.jackson.UnitJacksonModule;
 import javax.measure.Quantity;
 import java.io.IOException;
 
+/**
+ * Configuration, including {@link JsonSerializer}s and {@link Deserializer}s
+ * for Jackson object mappers.
+ */
 @Component
 public class JacksonConfiguration {
 

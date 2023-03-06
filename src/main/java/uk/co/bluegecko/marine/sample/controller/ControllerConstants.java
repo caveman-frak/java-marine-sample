@@ -7,10 +7,10 @@ import static org.springframework.http.MediaType.APPLICATION_XML;
 import static org.springframework.web.servlet.function.RequestPredicates.accept;
 
 /**
- * Error handling functions for controllers/routing.
+ * Controller constants.
  */
-public interface ControllerBase {
-	RequestPredicate ACCEPT_JSON = accept(APPLICATION_JSON);
-	RequestPredicate ACCEPT_XML = accept(APPLICATION_XML);
-	RequestPredicate ACCEPT_JSON_XML = accept(APPLICATION_JSON, APPLICATION_XML);
+public class ControllerConstants {
+	public static final RequestPredicate ACCEPT_JSON = accept(APPLICATION_JSON);
+	public static final RequestPredicate ACCEPT_XML = accept(APPLICATION_XML);
+	public static final RequestPredicate ACCEPT_JSON_XML = accept(APPLICATION_JSON, APPLICATION_XML);
 }

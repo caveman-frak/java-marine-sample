@@ -13,6 +13,7 @@ import uk.co.bluegecko.marine.sample.handler.VesselHandler;
 
 import static org.springframework.web.servlet.function.RequestPredicates.all;
 import static org.springframework.web.servlet.function.RouterFunctions.route;
+import static uk.co.bluegecko.marine.sample.controller.ControllerConstants.ACCEPT_JSON;
 
 /**
  * Routing for Vessel end-points.
@@ -20,7 +21,7 @@ import static org.springframework.web.servlet.function.RouterFunctions.route;
 @Configuration(proxyBeanMethods = false)
 @Value
 @Slf4j
-public class VesselController implements ControllerBase {
+public class VesselController {
 
 	@Bean
 	public RouterFunction<ServerResponse> routerFunction(VesselHandler vesselHandler, ErrorHandler errorHandler) {

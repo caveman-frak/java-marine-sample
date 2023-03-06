@@ -13,6 +13,12 @@ import java.util.UUID;
 import static systems.uom.ucum.UCUM.METER;
 import static systems.uom.ucum.UCUM.TONNE;
 
+/**
+ * Simplified representation of a marine vessel.
+ * <p>
+ * Stores measurements in Metric ({@link systems.uom.ucum.UCUM#METER} and {@link systems.uom.ucum.UCUM#TONNE},
+ * but can be entered in any standard unit using the builder.
+ */
 @Value
 @Builder
 public class Vessel {

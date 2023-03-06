@@ -1,6 +1,7 @@
 package uk.co.bluegecko.marine.sample.handler;
 
 import lombok.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.function.ServerResponse;
 import uk.co.bluegecko.marine.sample.model.data.Vessel;
@@ -9,6 +10,9 @@ import uk.co.bluegecko.marine.sample.service.VesselService;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Handler for all {@link Vessel} related REST requests.
+ */
 @Service
 @Value
 public class VesselHandler {
@@ -16,7 +20,7 @@ public class VesselHandler {
 	VesselService vesselService;
 
 	/**
-	 * Find all active vessels.
+	 * Find all active {@link Vessel}s.
 	 *
 	 * @return 200 response with list of active vessels.
 	 */
@@ -25,9 +29,9 @@ public class VesselHandler {
 	}
 
 	/**
-	 * Find and return the vessel with the unique id.
+	 * Find and return the {@link Vessel} with the unique id.
 	 *
-	 * @param uuid the unique UUID of the vessel.
+	 * @param uuid the unique {@link UUID} of the vessel.
 	 * @return 200 response with the vessel if it exists or 404.
 	 */
 	public ServerResponse find(String uuid) {
@@ -36,6 +40,13 @@ public class VesselHandler {
 				.orElse(ServerResponse.notFound().build());
 	}
 
+	/**
+	 * Find and delete the {@link Vessel} with the unique id.
+	 *
+	 * @param uuid the unique {@link UUID} of the vessel.
+	 * @return {@link ServerResponse} of {@link HttpStatus#NO_CONTENT} if the vessel was found and deleted,
+	 * otherwise {@link HttpStatus#NOT_FOUND}.
+	 */
 	public ServerResponse delete(String uuid) {
 		if (vesselService.delete(UUID.fromString(uuid)))
 			return ServerResponse.noContent().build();
