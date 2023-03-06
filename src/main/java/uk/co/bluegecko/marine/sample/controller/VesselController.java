@@ -1,7 +1,5 @@
 package uk.co.bluegecko.marine.sample.controller;
 
-import lombok.Value;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -19,18 +17,13 @@ import static uk.co.bluegecko.marine.sample.controller.ControllerConstants.ACCEP
  * Routing for Vessel end-points.
  */
 @Configuration(proxyBeanMethods = false)
-@Value
-@Slf4j
 public class VesselController {
 
 	@Bean
-	public RouterFunction<ServerResponse> routerFunction(VesselHandler vesselHandler, ErrorHandler errorHandler) {
+	public RouterFunction<ServerResponse> vesselRouting(VesselHandler vesselHandler, ErrorHandler errorHandler) {
 		return route().nest(RequestPredicates.path("/vessel"),
 						builder -> {
-							builder.before(request -> {
-								log.info("Processing {} {}", request.method(), request.requestPath());
-								return request;
-							});
+							builder.before(errorHandler::logProcessingRequest);
 							builder.GET("", ACCEPT_JSON, request ->
 									vesselHandler.all());
 							builder.GET("/{id}", ACCEPT_JSON, request ->
@@ -40,7 +33,7 @@ public class VesselController {
 						}
 				)
 				.onError(IllegalArgumentException.class, (e, request) ->
-						errorHandler.buildResponse(e, request, HttpStatus.BAD_REQUEST))
+						errorHandler.buildExceptionResponse(e, request, HttpStatus.BAD_REQUEST))
 				.build();
 	}
 

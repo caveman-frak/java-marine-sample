@@ -22,7 +22,7 @@ public class VesselHandler {
 	/**
 	 * Find all active {@link Vessel}s.
 	 *
-	 * @return 200 response with list of active vessels.
+	 * @return {@link ServerResponse} of {@link HttpStatus#OK} response with list of active vessels.
 	 */
 	public ServerResponse all() {
 		return ServerResponse.ok().body(vesselService.all());
@@ -32,7 +32,8 @@ public class VesselHandler {
 	 * Find and return the {@link Vessel} with the unique id.
 	 *
 	 * @param uuid the unique {@link UUID} of the vessel.
-	 * @return 200 response with the vessel if it exists or 404.
+	 * @return {@link ServerResponse} of {@link HttpStatus#OK} response with the vessel if it exists
+	 * otherwise {@link HttpStatus#NOT_FOUND}.
 	 */
 	public ServerResponse find(String uuid) {
 		Optional<Vessel> result = vesselService.find(UUID.fromString(uuid));

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 /**
- * Handle controller related errors.
+ * Handle {@link ServerRequest} related errors and logging.
  */
 @Service
 @Value
@@ -30,16 +30,16 @@ public class ErrorHandler {
 	Clock clock;
 	RandomGenerator generator;
 
-	public ServerResponse buildResponse(Throwable e, ServerRequest request, HttpStatus status) {
-		String marker = buildMarker();
-		log.info("Error handled during {} {} [{}], exception {} -> {} {}. Marker: ({})",
-				request.method(),
-				request.requestPath(),
-				acceptType(request),
-				e.getClass().getSimpleName(),
-				status.value(),
-				status.getReasonPhrase(),
-				marker);
+	/**
+	 * Create a {@link ServerRequest} with a populated {@link ProblemDetail} of the handled condition.
+	 *
+	 * @param e       the {@link Throwable} that triggered the condition.
+	 * @param request the {@link ServerRequest} that triggered the condition.
+	 * @param status  the {@link HttpStatus} resulting from the condition.
+	 * @return the response detailed with a {@link ProblemDetail} of the condition.
+	 */
+	public ServerResponse buildExceptionResponse(Throwable e, ServerRequest request, HttpStatus status) {
+		String marker = logExceptionWithMarker(e, request, status, buildMarker());
 
 		ProblemDetail detail = ProblemDetail.forStatusAndDetail(status, e.getLocalizedMessage());
 		detail.setInstance(request.uri());
@@ -47,6 +47,33 @@ public class ErrorHandler {
 		detail.setProperty("marker", marker);
 
 		return EntityResponse.fromObject(detail).status(status).build();
+	}
+
+	private String logExceptionWithMarker(Throwable e, ServerRequest request, HttpStatus status, String marker) {
+		log.info("Error handled during {} {} [{}] : exception {} -> {} {} :: Marker: ({})",
+				request.method(),
+				request.requestPath(),
+				acceptType(request),
+				e.getClass().getSimpleName(),
+				status.value(),
+				status.getReasonPhrase(),
+				marker);
+		return marker;
+	}
+
+	/**
+	 * Log details of the request.
+	 *
+	 * @param request the {@link ServerRequest}.
+	 * @return the request to continue processing.
+	 */
+	public ServerRequest logProcessingRequest(ServerRequest request) {
+
+		log.info("Processing {} {} [{}]",
+				request.method(),
+				request.requestPath(),
+				acceptType(request));
+		return request;
 	}
 
 	private String buildMarker() {
