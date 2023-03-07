@@ -16,6 +16,25 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  datasource:
+    url: jdbc:h2:mem:sample-db;MODE=MariaDB;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings.trace: false
+      settings.web-allow-others: true
+  liquibase:
+    enabled: true
+    changelog: config/liquibase/master.yaml
+    contexts: ddl,static,system
+    user: sa
+    password: password
 
 management:
   endpoints:
@@ -30,6 +49,14 @@ management:
 logging:
   group:
     bluegecko: "uk.co.bluegecko"
+    noise: "org.apache,
+      org.springframework,
+      javax.management,
+      org.hibernate,
+      com.zaxxer.hikari.HikariConfig,
+      com.zaxxer.hikari.HikariPool,
+      tech.units.indriya.unit"
   level:
-    root: "info"
+    root: "debug"
     bluegecko: "debug"
+    noise: "info"

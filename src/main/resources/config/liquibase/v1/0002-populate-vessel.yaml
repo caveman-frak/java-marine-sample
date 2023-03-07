@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01
+      author: cavemanfrak
+      context: static
+      changes:
+        - loadData:
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+              - column:
+                  name: name
+                  type: CHAR(255)
+              - column:
+                  name: active
+                  type: BOOLEAN
+              - column:
+                  name: tonnage
+                  type: DECIMAL(8,2)
+              - column:
+                  name: beam
+                  type: DECIMAL(8,2)
+              - column:
+                  header: length
+                  name: len
+                  type: DECIMAL(8,2)
+              - column:
+                  name: draft
+                  type: DECIMAL(8,2)
+            relativeToChangelogFile: true
+            file: v1/data/0002-vessel-data.csv
+            schemaName: marine
+            tableName: vessel
+            usePreparedStatements: true
+            encoding: UTF-8

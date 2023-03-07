@@ -29,18 +29,18 @@ public class Vessel {
 	@NonNull
 	String name;
 	double tonnage;
-	double width;
+	double beam;
 	double length;
-	double draught;
+	double draft;
 
 	public Vessel convertTo(Unit<Mass> massUnit, Unit<Length> lengthUnit) {
 		return Vessel.builder()
 				.id(getId())
 				.name(getName())
 				.tonnage(getTonnage(), massUnit)
-				.width(getWidth(), lengthUnit)
+				.beam(getBeam(), lengthUnit)
 				.length(getLength(), lengthUnit)
-				.draught(getDraught(), lengthUnit)
+				.draft(getDraft(), lengthUnit)
 				.build();
 	}
 
@@ -61,13 +61,13 @@ public class Vessel {
 			return this;
 		}
 
-		public VesselBuilder width(double quantity, Unit<Length> unit) {
-			width = Quantities.getQuantity(quantity, unit).to(METER).getValue().doubleValue();
+		public VesselBuilder beam(double quantity, Unit<Length> unit) {
+			beam = Quantities.getQuantity(quantity, unit).to(METER).getValue().doubleValue();
 			return this;
 		}
 
-		public VesselBuilder width(double width) {
-			this.width = width;
+		public VesselBuilder beam(double beam) {
+			this.beam = beam;
 			return this;
 		}
 
@@ -81,13 +81,13 @@ public class Vessel {
 			return this;
 		}
 
-		public VesselBuilder draught(double quantity, Unit<Length> unit) {
-			draught = Quantities.getQuantity(quantity, unit).to(METER).getValue().doubleValue();
+		public VesselBuilder draft(double quantity, Unit<Length> unit) {
+			draft = Quantities.getQuantity(quantity, unit).to(METER).getValue().doubleValue();
 			return this;
 		}
 
-		public VesselBuilder draught(double draught) {
-			this.draught = draught;
+		public VesselBuilder draft(double draught) {
+			this.draft = draught;
 			return this;
 		}
 

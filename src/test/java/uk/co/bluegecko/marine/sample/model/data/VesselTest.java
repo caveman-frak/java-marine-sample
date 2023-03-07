@@ -26,11 +26,11 @@ class VesselTest {
 
 	@Test
 	void testCreateWithBits() {
-		Vessel vessel = Vessel.builder().id(0, 1).name("Test 01").draught(2.5, METER).build();
+		Vessel vessel = Vessel.builder().id(0, 1).name("Test 01").draft(2.5, METER).build();
 
 		assertThat(vessel.getId()).isEqualTo(new UUID(0, 1));
 		assertThat(vessel.getName()).isEqualTo("Test 01");
-		assertThat(vessel.getDraught()).isEqualTo(2.5, within(0.01));
+		assertThat(vessel.getDraft()).isEqualTo(2.5, within(0.01));
 	}
 
 	@Test
@@ -66,13 +66,13 @@ class VesselTest {
 	@Test
 	void testDraughtConversion() {
 		assertThat(Vessel.builder().id(0, 1)
-				.name("Test 01").draught(5.0, METER).build()
-				.getDraught())
+				.name("Test 01").draft(5.0, METER).build()
+				.getDraft())
 				.as("as 5 Meters")
 				.isEqualTo(5.0, within(0.01));
 		assertThat(Vessel.builder().id(0, 1)
-				.name("Test 01").draught(150, CENTI(METRE)).build()
-				.getDraught())
+				.name("Test 01").draft(150, CENTI(METRE)).build()
+				.getDraft())
 				.as("as 150 cm")
 				.isEqualTo(1.5, within(0.01));
 	}

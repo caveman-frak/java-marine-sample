@@ -29,15 +29,14 @@ bootJar {
 
 dependencies {
     implementation 'io.opentelemetry:opentelemetry-api'
-//    runtimeOnly 'io.opentelemetry:opentelemetry-sdk'
-//    implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
-//    implementation 'io.opentelemetry:opentelemetry-semconv:1.23.1-alpha'
-//    implementation 'io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:1.23.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.liquibase:liquibase-core'
     implementation 'org.locationtech.spatial4j:spatial4j:0.8'
     implementation 'tech.uom.lib:uom-lib-jackson:2.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.h2database:h2'
 }
 
 testing {
@@ -76,4 +75,5 @@ task downloadAgent(type: Download) {
     src "https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar"
     dest project.buildDir.toString() + "/otel/opentelemetry-javaagent.jar"
     overwrite true
+    onlyIfModified true
 }

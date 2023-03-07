@@ -36,11 +36,11 @@ public class VesselControllerTest {
 	private MockMvc mockMvc;
 
 	private final List<Vessel> vessels = List.of(
-			Vessel.builder().id(11, 1).name("Test 001").tonnage(1.0).width(2.5).length(5.1).build(),
-			Vessel.builder().id(12, 2).active(false).name("Test 002").tonnage(1.1).width(2.4).length(5.2).build(),
-			Vessel.builder().id(13, 3).name("Test 003").tonnage(1.2).width(2.3).length(5.3).build(),
-			Vessel.builder().id(14, 4).name("Test 004").tonnage(1.3).width(2.2).length(5.4).build(),
-			Vessel.builder().id(15, 5).name("Test 005").tonnage(1.4).width(2.1).length(5.5).build());
+			Vessel.builder().id(11, 1).name("Test 001").tonnage(1.0).beam(2.5).length(5.1).build(),
+			Vessel.builder().id(12, 2).active(false).name("Test 002").tonnage(1.1).beam(2.4).length(5.2).build(),
+			Vessel.builder().id(13, 3).name("Test 003").tonnage(1.2).beam(2.3).length(5.3).build(),
+			Vessel.builder().id(14, 4).name("Test 004").tonnage(1.3).beam(2.2).length(5.4).build(),
+			Vessel.builder().id(15, 5).name("Test 005").tonnage(1.4).beam(2.1).length(5.5).build());
 
 	@BeforeEach
 	void setUp() {
