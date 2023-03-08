@@ -1,35 +1,41 @@
-package uk.co.bluegecko.marine.sample.service.base;
+package uk.co.bluegecko.marine.sample.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import uk.co.bluegecko.marine.sample.model.data.Vessel;
-import uk.co.bluegecko.marine.sample.service.VesselService;
+import uk.co.bluegecko.marine.sample.repository.VesselRepository;
+import uk.co.bluegecko.marine.sample.service.base.VesselServiceBase;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
-class VesselServiceBaseTest {
+@DataJpaTest
+class VesselServiceTest {
 
+	@Autowired
+	private VesselRepository vesselRepository;
 	private VesselService vesselService;
 
 	@BeforeEach
 	void setUp() {
-		vesselService = new VesselServiceBase();
+		vesselService = new VesselServiceBase(vesselRepository);
 	}
 
 	@Test
 	void testAll() {
 		assertThat(vesselService.all()).hasSize(4)
 				.extracting(Vessel::getName)
-				.contains("Test 001", "Test 003", "Test 004", "Test 005");
+				.containsExactly("Test 001", "Test 003", "Test 004", "Test 005");
 	}
 
 	@Test
 	@SuppressWarnings("null")
 	void testFind() {
-		assertThat(vesselService.find(new UUID(11, 1)))
+		assertThat(vesselService.find(new UUID(1, 1)))
 				.as("Correct ID")
 				.isPresent()
 				.contains(vesselService.all().get(0));
@@ -46,10 +52,10 @@ class VesselServiceBaseTest {
 	@Test
 	@SuppressWarnings("null")
 	void testDelete() {
-		assertThat(vesselService.delete(new UUID(11, 1)))
+		assertThat(vesselService.delete(new UUID(1, 1)))
 				.as("Correct ID")
 				.isTrue();
-		assertThat(vesselService.delete(new UUID(0, 1)))
+		assertThat(vesselService.delete(new UUID(1, 9)))
 				.as("Incorrect ID")
 				.isFalse();
 		assertThatNullPointerException()
@@ -61,14 +67,14 @@ class VesselServiceBaseTest {
 
 	@Test
 	void testDeleteEffects() {
-		assertThat(vesselService.delete(new UUID(11, 1)))
-				.as("First pass")
+		assertThat(vesselService.delete(new UUID(1, 1)))
+				.as("First pass, vessel found")
 				.isTrue();
-		assertThat(vesselService.delete(new UUID(11, 1)))
-				.as("Second pass, vessel deleted")
+		assertThat(vesselService.delete(new UUID(1, 1)))
+				.as("Second pass, vessel not found")
 				.isFalse();
 		assertThat(vesselService.all()).hasSize(3)
 				.extracting(Vessel::getName)
-				.contains("Test 003", "Test 004", "Test 005");
+				.containsExactly("Test 003", "Test 004", "Test 005");
 	}
 }

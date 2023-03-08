@@ -36,7 +36,7 @@ dependencies {
     implementation 'org.locationtech.spatial4j:spatial4j:0.8'
     implementation 'tech.uom.lib:uom-lib-jackson:2.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
-    implementation 'com.h2database:h2'
+    runtimeOnly 'com.h2database:h2'
 }
 
 testing {
@@ -44,7 +44,6 @@ testing {
         configureEach {
             useJUnitJupiter()
             dependencies {
-                implementation project()
                 implementation 'org.springframework.boot:spring-boot-starter-test'
                 implementation 'org.assertj:assertj-core'
                 implementation 'org.mockito:mockito-core'
@@ -57,18 +56,15 @@ testing {
         integrationTest(JvmTestSuite) {
             dependencies {
                 implementation project()
-                implementation 'org.springframework:spring-web:6.0.5'
+                compileOnly 'org.springframework:spring-web'
+                compileOnly 'org.springframework.data:spring-data-jpa'
             }
         }
     }
 }
 
-tasks.named('integrationTest') {
-    dependsOn(testing.suites.test)
-}
-
 tasks.named('check') {
-    dependsOn(testing.suites.integrationTest)
+    dependsOn testing.suites.integrationTest
 }
 
 task downloadAgent(type: Download) {

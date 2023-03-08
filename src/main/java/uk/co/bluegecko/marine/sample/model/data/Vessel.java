@@ -1,8 +1,10 @@
 package uk.co.bluegecko.marine.sample.model.data;
 
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Value;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import lombok.*;
 import tech.units.indriya.quantity.Quantities;
 
 import javax.measure.Unit;
@@ -19,18 +21,29 @@ import static systems.uom.ucum.UCUM.TONNE;
  * Stores measurements in Metric ({@link systems.uom.ucum.UCUM#METER} and {@link systems.uom.ucum.UCUM#TONNE},
  * but can be entered in any standard unit using the builder.
  */
-@Value
+@Entity
+@Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Vessel {
-	@NonNull
+	@Id
+	@GeneratedValue
 	UUID id;
+	@Column(nullable = false)
+	@Setter
 	@Builder.Default
 	boolean active = true;
+	@Column(nullable = false)
 	@NonNull
 	String name;
+	@Column
 	double tonnage;
+	@Column
 	double beam;
+	@Column(name = "len")
 	double length;
+	@Column
 	double draft;
 
 	public Vessel convertTo(Unit<Mass> massUnit, Unit<Length> lengthUnit) {

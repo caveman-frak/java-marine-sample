@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 01
+      id: "01"
       author: cavemanfrak
       context: static
       changes:
@@ -30,7 +30,6 @@ databaseChangeLog:
                   type: DECIMAL(8,2)
             relativeToChangelogFile: true
             file: v1/data/0002-vessel-data.csv
-            schemaName: marine
             tableName: vessel
             usePreparedStatements: true
             encoding: UTF-8

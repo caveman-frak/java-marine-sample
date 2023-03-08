@@ -17,12 +17,14 @@ spring:
     problemdetails:
       enabled: true
   datasource:
-    url: jdbc:h2:mem:sample-db;MODE=MariaDB;DATABASE_TO_LOWER=TRUE
+    url: jdbc:h2:mem:test;MODE=MariaDB;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
     username: sa
-    password: password
+    password:
     driverClassName: org.h2.Driver
   jpa:
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: none
   h2:
     console:
       enabled: true
@@ -34,7 +36,13 @@ spring:
     changelog: config/liquibase/master.yaml
     contexts: ddl,static,system
     user: sa
-    password: password
+    password:
+    default-schema: public
+    liquibase-schema: public
+
+hibernate:
+  hbm2ddl:
+    auto: none
 
 management:
   endpoints:
@@ -53,9 +61,8 @@ logging:
       org.springframework,
       javax.management,
       org.hibernate,
-      com.zaxxer.hikari.HikariConfig,
-      com.zaxxer.hikari.HikariPool,
-      tech.units.indriya.unit"
+      com.zaxxer.hikari,
+      tech.units.indriya"
   level:
     root: "debug"
     bluegecko: "debug"
