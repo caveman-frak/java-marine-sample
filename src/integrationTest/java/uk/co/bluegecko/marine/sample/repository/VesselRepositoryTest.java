@@ -4,7 +4,6 @@ import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import uk.co.bluegecko.marine.sample.model.data.Identifier;
 import uk.co.bluegecko.marine.sample.model.data.IdentityProvider;
 import uk.co.bluegecko.marine.sample.model.data.Vessel;
 
@@ -97,8 +96,7 @@ class VesselRepositoryTest {
 				.orElseThrow();
 		assertThat(vessel.getIdentifiers())
 				.hasSize(1)
-				.contains(
-						Identifier.builder().provider(IdentityProvider.NICKNAME).name("Test-001").build());
+				.containsValues("Test-001");
 	}
 
 	@Test
@@ -107,17 +105,12 @@ class VesselRepositoryTest {
 		Vessel vessel = vesselRepository.findById(new UUID(1, 5))
 				.orElseThrow();
 		assertThat(vessel.getIdentifiers()).hasSize(1);
-		vessel.getIdentifiers().add(
-				Identifier.builder().provider(IdentityProvider.MMSI).name("00000005").build()
-		);
+		vessel.getIdentifiers().put(IdentityProvider.MMSI, "00000005");
 		// add a second identifier and save
 		vessel = vesselRepository.save(vessel);
 		assertThat(vessel.getIdentifiers())
 				.hasSize(2)
-				.contains(
-						Identifier.builder().provider(IdentityProvider.NICKNAME).name("Test-005").build(),
-						Identifier.builder().provider(IdentityProvider.MMSI).name("00000005").build()
-				);
+				.containsValues("Test-005", "00000005");
 	}
 
 	@Test

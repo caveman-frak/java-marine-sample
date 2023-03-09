@@ -7,8 +7,8 @@ import tech.units.indriya.quantity.Quantities;
 import javax.measure.Unit;
 import javax.measure.quantity.Length;
 import javax.measure.quantity.Mass;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static systems.uom.ucum.UCUM.METER;
@@ -17,7 +17,8 @@ import static systems.uom.ucum.UCUM.TONNE;
 /**
  * Simplified representation of a marine vessel.
  * <p>
- * Stores measurements in Metric ({@link systems.uom.ucum.UCUM#METER} and {@link systems.uom.ucum.UCUM#TONNE},
+ * Stores measurements in Metric
+ * (Length in {@link systems.uom.ucum.UCUM#METER} and Mass in {@link systems.uom.ucum.UCUM#TONNE}),
  * but can be entered in any standard unit using the builder.
  */
 @Entity
@@ -39,9 +40,11 @@ public class Vessel {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "identifier",
 			joinColumns = {@JoinColumn(name = "vessel", referencedColumnName = "id")})
+	@MapKeyColumn(name = "provider")
+	@Column(name = "name")
 	@NonNull
 	@Builder.Default
-	private Set<Identifier> identifiers = new HashSet<>();
+	private Map<IdentityProvider, String> identifiers = new EnumMap<>(IdentityProvider.class);
 	@Column
 	private double tonnage;
 	@Column
@@ -116,10 +119,10 @@ public class Vessel {
 
 		public VesselBuilder identifier(IdentityProvider provider, String name) {
 			if (!identifiers$set) {
-				identifiers$value = new HashSet<>();
+				identifiers$value = new EnumMap<>(IdentityProvider.class);
 				identifiers$set = true;
 			}
-			identifiers$value.add(Identifier.builder().provider(provider).name(name).build());
+			identifiers$value.put(provider, name);
 			// when setting Nickname default vessel name if not already set
 			if (this.name == null && provider == IdentityProvider.NICKNAME) {
 				this.name = name;

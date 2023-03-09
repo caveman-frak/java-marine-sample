@@ -2,7 +2,7 @@ package uk.co.bluegecko.marine.sample.model.data;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
+import java.util.Map;
 import java.util.UUID;
 
 import static javax.measure.MetricPrefix.CENTI;
@@ -91,15 +91,13 @@ class VesselTest {
 	void testWithIdentifier() {
 		assertThat(Vessel.builder().id(0, 1)
 				.name("Test 01")
-				.identifiers(Set.of(
-						Identifier.builder().provider(IdentityProvider.NICKNAME).name("testy").build(),
-						Identifier.builder().provider(IdentityProvider.MMSI).name("00000001").build()))
+				.identifiers(Map.of(
+						IdentityProvider.NICKNAME, "testy",
+						IdentityProvider.MMSI, "00000001"))
 				.build()
 				.getIdentifiers())
 				.isNotNull()
-				.contains(
-						Identifier.builder().provider(IdentityProvider.NICKNAME).name("testy").build(),
-						Identifier.builder().provider(IdentityProvider.MMSI).name("00000001").build());
+				.containsValues("testy", "00000001");
 	}
 
 	@Test
@@ -115,8 +113,6 @@ class VesselTest {
 		assertThat(vessel.getIdentifiers())
 				.as("identifiers set")
 				.isNotNull()
-				.contains(
-						Identifier.builder().provider(IdentityProvider.NICKNAME).name("testy").build(),
-						Identifier.builder().provider(IdentityProvider.MMSI).name("00000001").build());
+				.containsValues("testy", "00000001");
 	}
 }
