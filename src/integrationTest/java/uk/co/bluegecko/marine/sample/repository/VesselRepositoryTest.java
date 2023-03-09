@@ -24,8 +24,8 @@ class VesselRepositoryTest {
 		assertThat(vesselRepository.findById(new UUID(1, 1)))
 				.isPresent()
 				.get()
-				.extracting(Vessel::getName)
-				.isEqualTo("Test 001");
+				.extracting(v -> v.getIdentifier(IdentityProvider.NICKNAME).orElseThrow())
+				.isEqualTo("Test-001");
 	}
 
 	@Test
@@ -35,26 +35,32 @@ class VesselRepositoryTest {
 						new UUID(1, 1),
 						new UUID(1, 2))))
 				.hasSize(2)
-				.extracting(Vessel::getName)
-				.containsExactly("Test 001", "Test 002");
+				.extracting(v -> v.getIdentifier(IdentityProvider.NICKNAME).orElseThrow())
+				.containsExactly("Test-001", "Test-002");
 	}
 
 	@Test
 	void testInsert() {
-		Vessel vessel = Vessel.builder().name("Test100").tonnage(15).beam(5).length(20).draft(2.5).build();
+		Vessel vessel = Vessel.builder()
+				.identifier(IdentityProvider.NICKNAME, "Test100")
+				.tonnage(15)
+				.beam(5)
+				.length(20)
+				.draft(2.5)
+				.build();
 		assertThat(vesselRepository.save(vessel))
 				.has(allOf(
 						new Condition<>(Vessel::isActive, "Active Vessel"),
 						new Condition<>(v -> v.getId() != null, "Id generated")));
-		assertThat(vesselRepository.findByName("Test100"))
-				.hasSize(1);
+		assertThat(vesselRepository.count())
+				.isEqualTo(6);
 	}
 
 	@Test
 	void testDelete() {
 		vesselRepository.deleteById(new UUID(1, 2));
-		assertThat(vesselRepository.findByName("Test002"))
-				.hasSize(0);
+		assertThat(vesselRepository.existsById(new UUID(1, 2)))
+				.isFalse();
 	}
 
 	@Test
@@ -75,19 +81,11 @@ class VesselRepositoryTest {
 	}
 
 	@Test
-	void testFindByName() {
-		assertThat(vesselRepository.findByName("Test 001"))
-				.hasSize(1)
-				.extracting(Vessel::getName)
-				.contains("Test 001");
-	}
-
-	@Test
 	void testFindByActiveTrue() {
 		assertThat(vesselRepository.findByActiveTrue())
 				.hasSize(4)
-				.extracting(Vessel::getName)
-				.containsExactly("Test 001", "Test 003", "Test 004", "Test 005");
+				.extracting(v -> v.getIdentifier(IdentityProvider.NICKNAME).orElseThrow())
+				.containsExactly("Test-001", "Test-003", "Test-004", "Test-005");
 	}
 
 	@Test

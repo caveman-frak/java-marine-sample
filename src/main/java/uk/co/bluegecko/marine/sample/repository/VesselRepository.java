@@ -8,8 +8,6 @@ import java.util.UUID;
 
 public interface VesselRepository extends CrudRepository<Vessel, UUID> {
 
-	List<Vessel> findByName(String name);
-
 	List<Vessel> findByActiveTrue();
 
 }

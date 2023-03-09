@@ -10,9 +10,6 @@ databaseChangeLog:
                   name: id
                   type: UUID
               - column:
-                  name: name
-                  type: CHAR(255)
-              - column:
                   name: active
                   type: BOOLEAN
               - column:

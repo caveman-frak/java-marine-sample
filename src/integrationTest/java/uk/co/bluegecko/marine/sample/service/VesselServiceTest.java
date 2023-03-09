@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import uk.co.bluegecko.marine.sample.model.data.Vessel;
+import uk.co.bluegecko.marine.sample.model.data.IdentityProvider;
 import uk.co.bluegecko.marine.sample.repository.VesselRepository;
 import uk.co.bluegecko.marine.sample.service.base.VesselServiceBase;
 
@@ -30,8 +30,8 @@ class VesselServiceTest {
 	@Test
 	void testAll() {
 		assertThat(vesselService.all()).hasSize(4)
-				.extracting(Vessel::getName)
-				.containsExactly("Test 001", "Test 003", "Test 004", "Test 005");
+				.extracting(v -> v.getIdentifier(IdentityProvider.NICKNAME).orElseThrow())
+				.containsExactly("Test-001", "Test-003", "Test-004", "Test-005");
 	}
 
 	@Test
@@ -76,7 +76,7 @@ class VesselServiceTest {
 				.as("Second pass, vessel not found")
 				.isFalse();
 		assertThat(vesselService.all()).hasSize(3)
-				.extracting(Vessel::getName)
-				.containsExactly("Test 003", "Test 004", "Test 005");
+				.extracting(v -> v.getIdentifier(IdentityProvider.NICKNAME).orElseThrow())
+				.containsExactly("Test-003", "Test-004", "Test-005");
 	}
 }

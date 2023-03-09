@@ -9,6 +9,7 @@ import javax.measure.quantity.Length;
 import javax.measure.quantity.Mass;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static systems.uom.ucum.UCUM.METER;
@@ -34,9 +35,6 @@ public class Vessel {
 	@Setter
 	@Builder.Default
 	private boolean active = true;
-	@Column(nullable = false)
-	@NonNull
-	private String name;
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "identifier",
 			joinColumns = {@JoinColumn(name = "vessel", referencedColumnName = "id")})
@@ -54,10 +52,13 @@ public class Vessel {
 	@Column
 	private double draft;
 
+	public Optional<String> getIdentifier(IdentityProvider provider) {
+		return Optional.of(getIdentifiers().get(provider));
+	}
+
 	public Vessel convertTo(Unit<Mass> massUnit, Unit<Length> lengthUnit) {
 		return Vessel.builder()
 				.id(getId())
-				.name(getName())
 				.identifiers(getIdentifiers())
 				.tonnage(getTonnage(), massUnit)
 				.beam(getBeam(), lengthUnit)
@@ -117,16 +118,12 @@ public class Vessel {
 			return id(new UUID(most, least));
 		}
 
-		public VesselBuilder identifier(IdentityProvider provider, String name) {
+		public VesselBuilder identifier(IdentityProvider provider, String ident) {
 			if (!identifiers$set) {
 				identifiers$value = new EnumMap<>(IdentityProvider.class);
 				identifiers$set = true;
 			}
-			identifiers$value.put(provider, name);
-			// when setting Nickname default vessel name if not already set
-			if (this.name == null && provider == IdentityProvider.NICKNAME) {
-				this.name = name;
-			}
+			identifiers$value.put(provider, ident);
 			return this;
 		}
 	}

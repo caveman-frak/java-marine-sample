@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import uk.co.bluegecko.marine.sample.config.TestApplicationConfiguration;
 import uk.co.bluegecko.marine.sample.handler.ErrorHandler;
 import uk.co.bluegecko.marine.sample.handler.VesselHandler;
+import uk.co.bluegecko.marine.sample.model.data.IdentityProvider;
 import uk.co.bluegecko.marine.sample.model.data.Vessel;
 import uk.co.bluegecko.marine.sample.service.VesselService;
 
@@ -36,11 +37,16 @@ public class VesselControllerTest {
 	private MockMvc mockMvc;
 
 	private final List<Vessel> vessels = List.of(
-			Vessel.builder().id(11, 1).name("Test 001").tonnage(1.0).beam(2.5).length(5.1).build(),
-			Vessel.builder().id(12, 2).active(false).name("Test 002").tonnage(1.1).beam(2.4).length(5.2).build(),
-			Vessel.builder().id(13, 3).name("Test 003").tonnage(1.2).beam(2.3).length(5.3).build(),
-			Vessel.builder().id(14, 4).name("Test 004").tonnage(1.3).beam(2.2).length(5.4).build(),
-			Vessel.builder().id(15, 5).name("Test 005").tonnage(1.4).beam(2.1).length(5.5).build());
+			Vessel.builder().id(11, 1).identifier(IdentityProvider.NICKNAME, "Test 001")
+					.tonnage(1.0).beam(2.5).length(5.1).build(),
+			Vessel.builder().id(12, 2).identifier(IdentityProvider.NICKNAME, "Test 002")
+					.tonnage(1.1).beam(2.4).length(5.2).active(false).build(),
+			Vessel.builder().id(13, 3).identifier(IdentityProvider.NICKNAME, "Test 003")
+					.tonnage(1.2).beam(2.3).length(5.3).build(),
+			Vessel.builder().id(14, 4).identifier(IdentityProvider.NICKNAME, "Test 004")
+					.tonnage(1.3).beam(2.2).length(5.4).build(),
+			Vessel.builder().id(15, 5).identifier(IdentityProvider.NICKNAME, "Test 005")
+					.tonnage(1.4).beam(2.1).length(5.5).build());
 
 	@BeforeEach
 	void setUp() {
@@ -57,10 +63,10 @@ public class VesselControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpectAll(
-						jsonPath("$.[0].name").value("Test 001"),
-						jsonPath("$.[1].name").value("Test 003"),
-						jsonPath("$.[2].name").value("Test 004"),
-						jsonPath("$.[3].name").value("Test 005"))
+						jsonPath("$.[0].identifiers.NICKNAME").value("Test 001"),
+						jsonPath("$.[1].identifiers.NICKNAME").value("Test 003"),
+						jsonPath("$.[2].identifiers.NICKNAME").value("Test 004"),
+						jsonPath("$.[3].identifiers.NICKNAME").value("Test 005"))
 				.andReturn();
 	}
 
@@ -71,7 +77,7 @@ public class VesselControllerTest {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.name").value("Test 001"))
+				.andExpect(jsonPath("$.identifiers.NICKNAME").value("Test 001"))
 				.andReturn();
 	}
 
