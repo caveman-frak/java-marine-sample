@@ -60,10 +60,19 @@ logging:
     noise: "org.apache,
       org.springframework,
       javax.management,
-      org.hibernate,
       com.zaxxer.hikari,
       tech.units.indriya"
   level:
     root: "debug"
     bluegecko: "debug"
     noise: "info"
+    # basic log level for all messages
+    org.hibernate: info
+    # SQL statements and parameters
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+    # Statistics and slow queries
+    org.hibernate.stat: debug
+    org.hibernate.SQL_SLOW: info
+    # 2nd Level Cache
+    org.hibernate.cache: debug

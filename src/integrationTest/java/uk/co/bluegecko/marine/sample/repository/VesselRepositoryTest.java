@@ -124,4 +124,25 @@ class VesselRepositoryTest {
 				.isEmpty();
 	}
 
+	@Test
+	void testFindByIdent() {
+		assertThat(vesselRepository.findByIdentity("0000003"))
+				.hasSize(1)
+				.extracting(Vessel::getId)
+				.contains(new UUID(1, 3));
+	}
+
+	@Test
+	void testFindByProviderIdent() {
+		assertThat(vesselRepository.findByProviderIdentity(IdentityProvider.IRCS, "0000003"))
+				.as("correct provider")
+				.isPresent()
+				.get()
+				.extracting(Vessel::getId)
+				.isEqualTo(new UUID(1, 3));
+		assertThat(vesselRepository.findByProviderIdentity(IdentityProvider.REGISTRY, "0000003"))
+				.as("incorrect provider")
+				.isEmpty();
+	}
+
 }
