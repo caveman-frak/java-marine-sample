@@ -2,6 +2,7 @@ package uk.co.bluegecko.marine.sample.model.data;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
 import java.util.UUID;
 
 import static javax.measure.MetricPrefix.CENTI;
@@ -75,5 +76,47 @@ class VesselTest {
 				.getDraft())
 				.as("as 150 cm")
 				.isEqualTo(1.5, within(0.01));
+	}
+
+	@Test
+	void testNoIdentifiers() {
+		assertThat(Vessel.builder().id(0, 1)
+				.name("Test 01").draft(5.0, METER).build()
+				.getIdentifiers())
+				.isNotNull()
+				.isEmpty();
+	}
+
+	@Test
+	void testWithIdentifier() {
+		assertThat(Vessel.builder().id(0, 1)
+				.name("Test 01")
+				.identifiers(Set.of(
+						Identifier.builder().provider(IdentityProvider.NICKNAME).name("testy").build(),
+						Identifier.builder().provider(IdentityProvider.MMSI).name("00000001").build()))
+				.build()
+				.getIdentifiers())
+				.isNotNull()
+				.contains(
+						Identifier.builder().provider(IdentityProvider.NICKNAME).name("testy").build(),
+						Identifier.builder().provider(IdentityProvider.MMSI).name("00000001").build());
+	}
+
+	@Test
+	void testWithIdentifierDefault() {
+		Vessel vessel = Vessel.builder().id(0, 1)
+				.identifier(IdentityProvider.NICKNAME, "testy")
+				.identifier(IdentityProvider.MMSI, "00000001")
+				.build();
+		assertThat(vessel.getName())
+				.as("name defaulted")
+				.isNotNull()
+				.isEqualTo("testy");
+		assertThat(vessel.getIdentifiers())
+				.as("identifiers set")
+				.isNotNull()
+				.contains(
+						Identifier.builder().provider(IdentityProvider.NICKNAME).name("testy").build(),
+						Identifier.builder().provider(IdentityProvider.MMSI).name("00000001").build());
 	}
 }

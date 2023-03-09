@@ -1,15 +1,14 @@
 package uk.co.bluegecko.marine.sample.model.data;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import tech.units.indriya.quantity.Quantities;
 
 import javax.measure.Unit;
 import javax.measure.quantity.Length;
 import javax.measure.quantity.Mass;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import static systems.uom.ucum.UCUM.METER;
@@ -29,27 +28,34 @@ import static systems.uom.ucum.UCUM.TONNE;
 public class Vessel {
 	@Id
 	@GeneratedValue
-	UUID id;
+	private UUID id;
 	@Column(nullable = false)
 	@Setter
 	@Builder.Default
-	boolean active = true;
+	private boolean active = true;
 	@Column(nullable = false)
 	@NonNull
-	String name;
+	private String name;
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "identifier",
+			joinColumns = {@JoinColumn(name = "vessel", referencedColumnName = "id")})
+	@NonNull
+	@Builder.Default
+	private Set<Identifier> identifiers = new HashSet<>();
 	@Column
-	double tonnage;
+	private double tonnage;
 	@Column
-	double beam;
+	private double beam;
 	@Column(name = "len")
-	double length;
+	private double length;
 	@Column
-	double draft;
+	private double draft;
 
 	public Vessel convertTo(Unit<Mass> massUnit, Unit<Length> lengthUnit) {
 		return Vessel.builder()
 				.id(getId())
 				.name(getName())
+				.identifiers(getIdentifiers())
 				.tonnage(getTonnage(), massUnit)
 				.beam(getBeam(), lengthUnit)
 				.length(getLength(), lengthUnit)
@@ -106,6 +112,19 @@ public class Vessel {
 
 		public VesselBuilder id(long most, long least) {
 			return id(new UUID(most, least));
+		}
+
+		public VesselBuilder identifier(IdentityProvider provider, String name) {
+			if (!identifiers$set) {
+				identifiers$value = new HashSet<>();
+				identifiers$set = true;
+			}
+			identifiers$value.add(Identifier.builder().provider(provider).name(name).build());
+			// when setting Nickname default vessel name if not already set
+			if (this.name == null && provider == IdentityProvider.NICKNAME) {
+				this.name = name;
+			}
+			return this;
 		}
 	}
 }

@@ -58,6 +58,8 @@ testing {
                 implementation project()
                 compileOnly 'org.springframework:spring-web'
                 compileOnly 'org.springframework.data:spring-data-jpa'
+                compileOnly 'jakarta.persistence:jakarta.persistence-api'
+
             }
         }
     }

@@ -2,7 +2,7 @@
 
 --changeset cavemanfrak:01 contextFilter:ddl
 CREATE TABLE IF NOT EXISTS vessel (
-    id UUID NOT NULL PRIMARY KEY COMMENT 'Internal Identifier',
+    id UUID NOT NULL PRIMARY KEY COMMENT 'Internal Identity',
     active BOOLEAN NOT NULL DEFAULT TRUE COMMENT 'In active service',
     name CHAR(255) NOT NULL COMMENT 'Registered Name',
     tonnage DECIMAL(8,2) NULL COMMENT 'Gross Tonnage',

@@ -1,9 +1,9 @@
 package uk.co.bluegecko.marine.sample.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import uk.co.bluegecko.marine.sample.model.data.Vessel;
 import uk.co.bluegecko.marine.sample.repository.VesselRepository;
 import uk.co.bluegecko.marine.sample.service.base.VesselServiceBase;
@@ -14,16 +14,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 @DataJpaTest
+@Import({VesselServiceBase.class})
 class VesselServiceTest {
 
 	@Autowired
 	private VesselRepository vesselRepository;
+	@Autowired
 	private VesselService vesselService;
 
-	@BeforeEach
-	void setUp() {
-		vesselService = new VesselServiceBase(vesselRepository);
-	}
+//	@BeforeEach
+//	void setUp() {
+//		vesselService = new VesselServiceBase(vesselRepository);
+//	}
 
 	@Test
 	void testAll() {

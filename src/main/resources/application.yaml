@@ -34,7 +34,7 @@ spring:
   liquibase:
     enabled: true
     changelog: config/liquibase/master.yaml
-    contexts: ddl,static,system
+    contexts: ddl,static,system,test
     user: sa
     password:
     default-schema: public
