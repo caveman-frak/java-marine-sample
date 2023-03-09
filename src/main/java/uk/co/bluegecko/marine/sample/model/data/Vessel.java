@@ -41,7 +41,7 @@ public class Vessel {
 	@CollectionTable(name = "identifier",
 			joinColumns = {@JoinColumn(name = "vessel", referencedColumnName = "id")})
 	@MapKeyColumn(name = "provider")
-	@Column(name = "name")
+	@Column(name = "ident")
 	@NonNull
 	@Builder.Default
 	private Map<IdentityProvider, String> identifiers = new EnumMap<>(IdentityProvider.class);

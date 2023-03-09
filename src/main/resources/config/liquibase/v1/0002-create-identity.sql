@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS identifier (
     vessel UUID NOT NULL COMMENT 'Vessel Internal Identity',
     provider ENUM('MMSI','IMO','IRCS','REGISTRY','NICKNAME','OTHER')
         NOT NULL COMMENT 'Provider of Identifier',
-    name CHAR(255) NOT NULL COMMENT 'Public Identifier (Name or Value)',
+    ident CHAR(255) NOT NULL COMMENT 'Public Identifier (Name or Value)',
     CONSTRAINT  fk_identifier_vessel
         FOREIGN KEY (vessel) REFERENCES vessel (id)
         ON DELETE CASCADE
@@ -20,14 +20,14 @@ CREATE OR REPLACE UNIQUE INDEX idx_identifier_vessel_source
     );
 
 --changeset cavemanfrak:03 contextFilter:ddl
-CREATE OR REPLACE UNIQUE INDEX idx_identifier_source_name
+CREATE OR REPLACE UNIQUE INDEX idx_identifier_source_ident
     ON identifier (
         provider,
-        name
+        ident
     );
 
 --changeset cavemanfrak:04 contextFilter:ddl
-CREATE OR REPLACE INDEX idx_identifier_name
+CREATE OR REPLACE INDEX idx_identifier_ident
     ON identifier (
-        name
+        ident
     );

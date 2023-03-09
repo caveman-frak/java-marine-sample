@@ -47,7 +47,7 @@ databaseChangeLog:
                   name: provider
                   type: ENUM
               - column:
-                  name: name
+                  name: ident
                   type: CHAR(255)
             relativeToChangelogFile: true
             file: v1/data/0003-02-identifier-data.csv

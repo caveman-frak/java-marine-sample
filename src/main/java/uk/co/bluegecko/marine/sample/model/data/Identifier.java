@@ -25,6 +25,6 @@ public class Identifier {
 
 	@Column
 	@NonNull
-	private String name;
+	private String ident;
 
 }
