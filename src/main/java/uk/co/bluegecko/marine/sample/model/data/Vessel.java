@@ -1,7 +1,13 @@
 package uk.co.bluegecko.marine.sample.model.data;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import systems.uom.ucum.UCUM;
 import tech.units.indriya.quantity.Quantities;
 
 import javax.measure.Unit;
@@ -19,7 +25,7 @@ import static systems.uom.ucum.UCUM.TONNE;
  * Simplified representation of a marine vessel.
  * <p>
  * Stores measurements in Metric
- * (Length in {@link systems.uom.ucum.UCUM#METER} and Mass in {@link systems.uom.ucum.UCUM#TONNE}),
+ * (Length in {@link UCUM#METER} and Mass in {@link UCUM#TONNE}),
  * but can be entered in any standard unit using the builder.
  */
 @Entity
